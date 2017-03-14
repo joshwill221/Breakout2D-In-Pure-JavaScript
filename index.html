@@ -30,48 +30,6 @@
     var rightPressed = false;
     var leftPressed = false;
 
-    function drawBall() {
-      // Draw the ball.
-      ctx.beginPath();
-      ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-      ctx.fillStyle = "#0095DD";
-      ctx.fill();
-      ctx.closePath();
-    }
-
-    function drawPaddle() {
-      ctx.beginPath();
-      ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-      ctx.fillStyle = "#0095DD";ctx.fill();
-      ctx.closePath();
-    }
-
-    function draw() {
-      // Clear the canvas.
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      // Draw the ball.
-      drawBall();
-      // Draw the paddle.
-      drawPaddle();
-      // Add speed to ball for its next position update.
-      x += dx;
-      y += dy;
-      // Check top & bottom boundaries.
-      if(y + dy < ballRadius || y + dy > canvas.height - ballRadius) {
-        dy = -dy;
-      }
-      // Check left & right boundaries.
-      if(x + dx < ballRadius || x + dx > canvas.width - ballRadius) {
-        dx = -dx;
-      }
-
-      if(rightPressed && paddleX < canvas.width - paddleWidth) {
-        paddleX += 7;
-      }
-      else if (leftPressed && paddleX > 0) {
-        paddleX -= 7;
-      }
-    }
     // Controls event listeners
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
@@ -93,6 +51,61 @@
         leftPressed = false;
       }
     }
+
+    function drawBall() {
+      // Draw the ball.
+      ctx.beginPath();
+      ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+      ctx.fillStyle = "#0095DD";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function drawPaddle() {
+      ctx.beginPath();
+      ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+      ctx.fillStyle = "#0095DD";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function draw() {
+      // Clear the canvas.
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Draw the ball.
+      drawBall();
+      // Draw the paddle.
+      drawPaddle();
+
+      // Check left & right boundaries.
+      if(x + dx < ballRadius || x + dx > canvas.width - ballRadius) {
+        dx = -dx;
+      }
+      // Check top boundary and reload if bottom boundary is hit.
+      if(y + dy < ballRadius) {
+        dy = -dy;
+      }
+      else if(y + dy > canvas.height - ballRadius) {
+        if(x > paddleX && x < paddleX + paddleWidth) {
+          dy = -dy;
+        }
+        else {
+          alert("GAME OVER");
+          document.location.reload();
+        }
+      }
+
+      if(rightPressed && paddleX < canvas.width - paddleWidth) {
+        paddleX += 7;
+      }
+      else if (leftPressed && paddleX > 0) {
+        paddleX -= 7;
+      }
+      // Add speed to ball for its next position update.
+      x += dx;
+      y += dy;
+    }
+
     // draw() will be called every 10 milliseconds
     setInterval(draw, 10);
 </script>
