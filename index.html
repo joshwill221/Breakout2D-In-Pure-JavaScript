@@ -22,10 +22,12 @@
     var dx = 2;
     var dy = -2;
 
+    var ballRadius = 10;
+
     function drawBall() {
       // Draw the ball.
       ctx.beginPath();
-      ctx.arc(x, y, 10, 0, Math.PI*2);
+      ctx.arc(x, y, ballRadius, 0, Math.PI*2);
       ctx.fillStyle = "#0095DD";
       ctx.fill();
       ctx.closePath();
@@ -35,8 +37,18 @@
       // Clear the canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawBall();
+
       x += dx;
       y += dy;
+
+      // Top & Bottom boundaries
+      if(y + dy < ballRadius || y + dy > canvas.height - ballRadius) {
+        dy = -dy;
+      }
+      // Left & Right boundaries
+      if(x + dx < ballRadius || x + dx > canvas.width - ballRadius) {
+        dx = -dx;
+      }
     }
 
     // draw() will be called every 10 milliseconds
