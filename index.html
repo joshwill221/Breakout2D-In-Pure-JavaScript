@@ -16,13 +16,19 @@
     // Store canvas and 2d rendering content that we use to paint the canvas
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
-
+    // Canvas dimensions.
     var x = canvas.width/2;
     var y = canvas.height-30;
+    // Ball variables.
+    var ballRadius = 10;
     var dx = 2;
     var dy = -2;
-
-    var ballRadius = 10;
+    // Paddle variables.
+    var paddleHeight = 10;
+    var paddleWidth = 75;
+    var paddleX = (canvas.width - paddleWidth) / 2;
+    var rightPressed = false;
+    var leftPressed = false;
 
     function drawBall() {
       // Draw the ball.
@@ -33,24 +39,60 @@
       ctx.closePath();
     }
 
-    function draw() {
-      // Clear the canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawBall();
+    function drawPaddle() {
+      ctx.beginPath();
+      ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+      ctx.fillStyle = "#0095DD";ctx.fill();
+      ctx.closePath();
+    }
 
+    function draw() {
+      // Clear the canvas.
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Draw the ball.
+      drawBall();
+      // Draw the paddle.
+      drawPaddle();
+      // Add speed to ball for its next position update.
       x += dx;
       y += dy;
-
-      // Top & Bottom boundaries
+      // Check top & bottom boundaries.
       if(y + dy < ballRadius || y + dy > canvas.height - ballRadius) {
         dy = -dy;
       }
-      // Left & Right boundaries
+      // Check left & right boundaries.
       if(x + dx < ballRadius || x + dx > canvas.width - ballRadius) {
         dx = -dx;
       }
+
+      if(rightPressed && paddleX < canvas.width - paddleWidth) {
+        paddleX += 7;
+      }
+      else if (leftPressed && paddleX > 0) {
+        paddleX -= 7;
+      }
+    }
+    // Controls event listeners
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+
+    function keyDownHandler(e) {
+      if(e.keyCode == 39) {
+        rightPressed = true;
+      }
+      if(e.keyCode == 37) {
+        leftPressed = true;
+      }
     }
 
+    function keyUpHandler(e) {
+      if(e.keyCode == 39) {
+        rightPressed = false;
+      }
+      if(e.keyCode == 37) {
+        leftPressed = false;
+      }
+    }
     // draw() will be called every 10 milliseconds
     setInterval(draw, 10);
 </script>
