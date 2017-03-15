@@ -41,6 +41,8 @@
 
     var score = 0;
 
+    var lives = 3;
+
     // Fill the 2D bricks array. more of an array object now?
     for(c=0; c<brickColumnCount; c++) {
       bricks[c] = [];
@@ -107,6 +109,13 @@
       ctx.fillText("Score: " + score, 8, 20);
     }
 
+    function drawLives() {
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "#0095DD";
+      // (text to display, x coordinates, y coordinates)
+      ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
+    }
+
     function drawBricks() {
       for(c=0; c<brickColumnCount; c++) {
         for(r=0; r<brickRowCount; r++) {
@@ -149,6 +158,7 @@
       drawBall();
       drawPaddle();
       drawScore();
+      drawLives();
       collisionDetection();
 
       // Check left & right boundaries.
@@ -164,8 +174,18 @@
           dy = -dy;
         }
         else {
-          alert("GAME OVER");
-          document.location.reload();
+          lives--;
+          if(!lives) {
+            alert("GAME OVER");
+            document.location.reload();
+          }
+          else {
+            x = canvas.width / 2;
+            y = canvas.height - 30;
+            dx = 2;
+            dy = -2;
+            paddleX = (canvas.width - paddleWidth) / 2;
+          }
         }
       }
 
@@ -178,10 +198,18 @@
       // Add speed to ball for its next position update.
       x += dx;
       y += dy;
+
+      /* The draw() function is now getting executed again and again within a
+      requestAnimationFrame() loop, but instead of the fixed 10 milliseconds
+      frame rate, we are giving control of the framerate back to the browser.
+      It will sync the framerate accordingly and render the shapes only when
+      needed. This produces a more efficient, smoother animation loop than the
+      older setInterval() method.
+      */
+      requestAnimationFrame(draw);
     }
 
-    // draw() will be called every 10 milliseconds
-    setInterval(draw, 10);
+    draw();
 </script>
 
 </body>
