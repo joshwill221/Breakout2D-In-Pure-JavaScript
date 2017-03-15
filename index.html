@@ -39,7 +39,9 @@
     var brickOffsetLeft = 30;
     var bricks = [];
 
-    // Fill the 2D bricks array
+    var score = 0;
+
+    // Fill the 2D bricks array. more of an array object now?
     for(c=0; c<brickColumnCount; c++) {
       bricks[c] = [];
       for(r=0; r<brickRowCount; r++) {
@@ -75,13 +77,25 @@
           if(b.status == 1) {
             // Check if the ball is inside any of the bricks.
             if(x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
-              // Block has been hit! Flip ball direction and update block status.
+              // Block has been hit! Flip ball direction update block status and up score.
               dy = -dy;
               b.status = 0;
+              score++;
+              if(score == brickRowCount * brickColumnCount) {
+                alert("YOU WIN, CONGRATULATIONS!");
+                document.location.reload();
+              }
             }
           }
         }
       }
+    }
+
+    function drawScore() {
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "#0095DD";
+      // (text to display, x coordinates, y coordinates)
+      ctx.fillText("Score: " + score, 8, 20);
     }
 
     function drawBricks() {
@@ -122,13 +136,10 @@
     function draw() {
       // Clear the canvas.
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      // Draw the bricks
       drawBricks();
-      // Draw the ball.
       drawBall();
-      // Draw the paddle.
       drawPaddle();
-      // Check Collisions
+      drawScore();
       collisionDetection();
 
       // Check left & right boundaries.
