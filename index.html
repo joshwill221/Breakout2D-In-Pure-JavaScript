@@ -10,7 +10,8 @@
 </head>
 <body>
 
-<canvas id="myCanvas" width="480" height="320"></canvas>
+<canvas onclick="draw()" id="myCanvas" width="480" height="320">
+</canvas>
 
 <script>
     // Store canvas and 2d rendering content that we use to paint the canvas
@@ -110,6 +111,7 @@
     function drawScore() {
       ctx.font = "16px Arial";
       ctx.fillStyle = "#0095DD";
+      ctx.textAlign="left";
       // (text to display, x coordinates, y coordinates)
       ctx.fillText("Score: " + score, 8, 20);
     }
@@ -123,7 +125,15 @@
     function drawPaused() {
       ctx.font = "30px Arial";
       ctx.fillStyle = "#0095DD";
+      ctx.textAlign="center";
       ctx.fillText("Paused", canvas.width - 290, canvas.height - 120);
+    }
+
+    function drawTextCenter(text) {
+      ctx.font = "30px Arial";
+      ctx.fillStyle = "#0095DD";
+      ctx.textAlign = "center";
+      ctx.fillText(text, canvas.width / 2, canvas.height / 2);
     }
 
     function drawBricks() {
@@ -226,8 +236,7 @@
       */
       requestAnimationFrame(draw);
     }
-
-    draw();
+    drawTextCenter("Click to Start Game");
 </script>
 
 </body>
