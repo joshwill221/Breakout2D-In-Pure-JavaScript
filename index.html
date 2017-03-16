@@ -165,27 +165,30 @@
       if(x + dx < ballRadius || x + dx > canvas.width - ballRadius) {
         dx = -dx;
       }
-      // Check top boundary and reload if bottom boundary is hit.
+      // Check top boundary
       if(y + dy < ballRadius) {
         dy = -dy;
       }
-      else if(y + dy > canvas.height - ballRadius) {
+      // Check if paddle is at ball position / hitting the ball.
+      else if(y + dy == canvas.height - ballRadius - paddleHeight) {
         if(x > paddleX && x < paddleX + paddleWidth) {
           dy = -dy;
         }
+      }
+      // Ball has been missed and hit the bottom.
+      else if(y + dy > canvas.height - ballRadius) {
+        lives--;
+        if(!lives) {
+          alert("GAME OVER");
+          document.location.reload();
+        }
         else {
-          lives--;
-          if(!lives) {
-            alert("GAME OVER");
-            document.location.reload();
-          }
-          else {
-            x = canvas.width / 2;
-            y = canvas.height - 30;
-            dx = 2;
-            dy = -2;
-            paddleX = (canvas.width - paddleWidth) / 2;
-          }
+          // No lives left so reset.
+          x = canvas.width / 2;
+          y = canvas.height - 30;
+          dx = 2;
+          dy = -2;
+          paddleX = (canvas.width - paddleWidth) / 2;
         }
       }
 
