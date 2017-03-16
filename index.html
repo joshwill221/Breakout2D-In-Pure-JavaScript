@@ -27,7 +27,7 @@
     // Paddle variables.
     var paddleHeight = 10;
     var paddleWidth = 75;
-    var paddleX = (canvas.width - paddleWidth) / 2;
+    var paddleX = canvas.width - paddleWidth;
     var rightPressed = false;
     var leftPressed = false;
     var paused = false;
@@ -82,7 +82,7 @@
     function mouseMoveHandler(e) {
       // RelativeX = mouse x coordinates.
       var relativeX = e.clientX - canvas.offsetLeft;
-      if(relativeX > 0 && relativeX < canvas.width) {
+      if(relativeX > 0 + paddleWidth / 2 && relativeX < canvas.width - paddleWidth / 2) {
         paddleX = relativeX - paddleWidth / 2;
       }
     }
@@ -119,6 +119,7 @@
     function drawLives() {
       ctx.font = "16px Arial";
       ctx.fillStyle = "#0095DD";
+      ctx.textAlign="left";
       ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
     }
 
@@ -126,7 +127,7 @@
       ctx.font = "30px Arial";
       ctx.fillStyle = "#0095DD";
       ctx.textAlign="center";
-      ctx.fillText("Paused", canvas.width - 290, canvas.height - 120);
+      ctx.fillText("Paused", canvas.width / 2, canvas.height - 120);
     }
 
     function drawTextCenter(text) {
@@ -212,7 +213,6 @@
             paddleX = (canvas.width - paddleWidth) / 2;
           }
         }
-
         if(rightPressed && paddleX < canvas.width - paddleWidth) {
           paddleX += 7;
         }
