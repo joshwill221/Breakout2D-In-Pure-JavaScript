@@ -29,6 +29,7 @@
     var paddleX = (canvas.width - paddleWidth) / 2;
     var rightPressed = false;
     var leftPressed = false;
+    var paused = false;
     // Brick variables.
     var brickRowCount = 3;
     var brickColumnCount = 5;
@@ -61,6 +62,10 @@
       }
       if(e.keyCode == 37) {
         leftPressed = true;
+      }
+      if(e.keyCode == 32 || e.keyCode == 80) {
+        // Space or p.
+        paused = !paused;
       }
     }
 
@@ -112,8 +117,13 @@
     function drawLives() {
       ctx.font = "16px Arial";
       ctx.fillStyle = "#0095DD";
-      // (text to display, x coordinates, y coordinates)
       ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
+    }
+
+    function drawPaused() {
+      ctx.font = "30px Arial";
+      ctx.fillStyle = "#0095DD";
+      ctx.fillText("Paused", canvas.width - 290, canvas.height - 120);
     }
 
     function drawBricks() {
@@ -152,56 +162,61 @@
     }
 
     function draw() {
-      // Clear the canvas.
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawBricks();
-      drawBall();
-      drawPaddle();
-      drawScore();
-      drawLives();
-      collisionDetection();
+      if(!paused) {
+        // Clear the canvas.
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBricks();
+        drawBall();
+        drawPaddle();
+        drawScore();
+        drawLives();
+        collisionDetection();
 
-      // Check left & right boundaries.
-      if(x + dx < ballRadius || x + dx > canvas.width - ballRadius) {
-        dx = -dx;
-      }
-      // Check top boundary
-      if(y + dy < ballRadius) {
-        dy = -dy;
-      }
-      // Check if paddle is at ball position / hitting the ball.
-      else if(y + dy == canvas.height - ballRadius - paddleHeight) {
-        if(x > paddleX && x < paddleX + paddleWidth) {
+        // Check left & right boundaries.
+        if(x + dx < ballRadius || x + dx > canvas.width - ballRadius) {
+          dx = -dx;
+        }
+        // Check top boundary
+        if(y + dy < ballRadius) {
           dy = -dy;
         }
-      }
-      // Ball has been missed and hit the bottom.
-      else if(y + dy > canvas.height - ballRadius) {
-        lives--;
-        if(!lives) {
-          alert("GAME OVER");
-          document.location.reload();
+        // Check if paddle is at ball position / hitting the ball.
+        else if(y + dy == canvas.height - ballRadius - paddleHeight) {
+          if(x > paddleX && x < paddleX + paddleWidth) {
+            dy = -dy;
+          }
         }
-        else {
-          // No lives left so reset.
-          x = canvas.width / 2;
-          y = canvas.height - 30;
-          dx = 2;
-          dy = -2;
-          paddleX = (canvas.width - paddleWidth) / 2;
+        // Ball has been missed and hit the bottom.
+        else if(y + dy > canvas.height - ballRadius) {
+          lives--;
+          if(!lives) {
+            alert("GAME OVER");
+            document.location.reload();
+          }
+          else {
+            // No lives left so reset.
+            x = canvas.width / 2;
+            y = canvas.height - 30;
+            dx = 2;
+            dy = -2;
+            paddleX = (canvas.width - paddleWidth) / 2;
+          }
         }
-      }
 
-      if(rightPressed && paddleX < canvas.width - paddleWidth) {
-        paddleX += 7;
+        if(rightPressed && paddleX < canvas.width - paddleWidth) {
+          paddleX += 7;
+        }
+        else if (leftPressed && paddleX > 0) {
+          paddleX -= 7;
+        }
+        // Add speed to ball for its next position update.
+        x += dx;
+        y += dy;
       }
-      else if (leftPressed && paddleX > 0) {
-        paddleX -= 7;
+      else {
+        // Paused
+        drawPaused();
       }
-      // Add speed to ball for its next position update.
-      x += dx;
-      y += dy;
-
       /* The draw() function is now getting executed again and again within a
       requestAnimationFrame() loop, but instead of the fixed 10 milliseconds
       frame rate, we are giving control of the framerate back to the browser.
