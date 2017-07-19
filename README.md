@@ -1,4 +1,4 @@
-# The 2D Game Breakout Using Plain JavaScript.
+# The 2D Game Breakout Made Using Plain JavaScript.
 
 [Play it here!](https://joshwill221.github.io/Breakout2D-In-Pure-JavaScript/)
 
