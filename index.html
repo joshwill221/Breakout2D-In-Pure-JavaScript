@@ -17,13 +17,16 @@
     // Store canvas and 2d rendering content that we use to paint the canvas
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
+    
     // Canvas dimensions.
     var x = canvas.width/2;
     var y = canvas.height-30;
+    
     // Ball variables.
     var ballRadius = 10;
     var dx = 2;
     var dy = -2;
+    
     // Paddle variables.
     var paddleHeight = 10;
     var paddleWidth = 75;
@@ -31,6 +34,7 @@
     var rightPressed = false;
     var leftPressed = false;
     var paused = false;
+    
     // Brick variables.
     var brickRowCount = 3;
     var brickColumnCount = 5;
@@ -52,6 +56,7 @@
         bricks[c][r] = { x: 0, y: 0, status: 1 };
       }
     }
+    
     // Controls event listeners
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
@@ -227,6 +232,7 @@
         // Paused
         drawPaused();
       }
+        
       /* The draw() function is now getting executed again and again within a
       requestAnimationFrame() loop, but instead of the fixed 10 milliseconds
       frame rate, we are giving control of the framerate back to the browser.
